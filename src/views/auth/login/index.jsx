@@ -49,7 +49,7 @@ export default function LoginForm() {
         localStorage.setItem("token", token);
 
         toast.success("Login successful");
-        router.push("/");
+        router.push("/profile");
       } else {
         throw new Error("Invalid login data");
       }

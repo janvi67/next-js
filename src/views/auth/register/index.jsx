@@ -221,10 +221,10 @@ function RegisterForm() {
             </button>
             <button
               type="button"
-              onClick={() => reset()}
+              onClick={() => router.push("/login")}
               className="btn btn-secondary"
             >
-              Reset
+              Login
             </button>
           </div>
         </form>

@@ -20,29 +20,18 @@ export default class AxiosWrapper {
     }
   };
 
-  static get = async ({ endpoint, page, limit = 10, search}) => {
-    await AxiosWrapper.retrieveToken();
-    let url = `${BASE_URL}${endpoint}`;
-    const searchParams = [];
-    let params;
-    if (search) {
-      searchParams.push(`title=${search}`);
-    }
-    if (page) {
-      searchParams.push(`page=${page}&limit=${limit}`);
-    }
-    
-    if (searchParams.length > 0) {
-      params = searchParams.join("&");
-      url = url + "?" + params;
-    }
-    
-    return axios.get(url, {
-      headers: {
-        Authorization: `${this.token}`,
-      },
-    });
-  };
+  // Inside ApiConfig.jsx or the AxiosWrapper module
+
+static get = async ({ endpoint, token }) => {
+  const url = `${BASE_URL}${endpoint}`;
+
+  return axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`, // Use the token here for Authorization
+    },
+  });
+};
+
 
   static getById = async ({ endpoint, id, filter }) => {
     await AxiosWrapper.retrieveToken();

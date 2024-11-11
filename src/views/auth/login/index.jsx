@@ -76,6 +76,13 @@ export default function LoginForm() {
         </div>
 
         <button type="submit">Login</button>
+        <button
+          type="button"
+          onClick={() => router.push("/register")}
+          className="btn btn-secondary"
+        >
+          Register
+        </button>
       </form>
     </div>
   );

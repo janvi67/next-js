@@ -2,12 +2,18 @@
 
 
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Layout() {
+export default function Layout({children}) {
   return (
     
       
-    <ToastContainer/>
+  <div>
+   
+      <ToastContainer  position="top-right" autoClose={3000}/>
+      {children}
+     
+  </div>
    
   );
 }

@@ -1,0 +1,43 @@
+/* components/LoginForm.module.css */
+
+.updateProfile {
+    left: 50%;
+    top: 50%;
+    margin-left: -7%;
+    position: absolute;
+    margin-top: -17%;
+  }
+  
+  .updateProfile div {
+    margin-bottom: 1rem;
+  }
+  
+  .updateProfile label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .updateProfile input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .updateProfile button {
+    padding: 0.5rem;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .updateProfile button:hover {
+    background-color: #005bb5;
+  }
+  
+  .updateProfile p {
+    color: red;
+    font-size: 0.875rem;
+  }
+  

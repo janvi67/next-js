@@ -48,7 +48,7 @@ static get = async ({ endpoint, token }) => {
     return axios.get(url, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${this.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
   };
@@ -77,30 +77,26 @@ static get = async ({ endpoint, token }) => {
   };
   
   
-  static put = async ({ endpoint, id, body }) => {
+  static put = async ({ endpoint,formData }) => {
     await AxiosWrapper.retrieveToken();
     let url = `${BASE_URL}${endpoint}`;
-    if (id) {
-      url += `/${id}`;
-    }
-    return axios.put(url, body, {
+   
+    return axios.put(url,formData, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `${this.token}`,
+        "Content-Type": "multipart/form-data",
+         Authorization: `Bearer ${this.token}`
       },
     });
   };
 
-  static delete = async ({ endpoint, id }) => {
+  static delete = async ({ endpoint }) => {
     await AxiosWrapper.retrieveToken();
     let url = `${BASE_URL}${endpoint}`;
-    if (id) {
-      url += `/${id}`;
-    }
-    return axios.delete(url, {
+   
+    return axios.delete(url,{
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${this.token}`,
+         Authorization: `Bearer ${this.token}`
       },
     });
   };

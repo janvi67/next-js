@@ -56,3 +56,22 @@ export const getUserProfile = async (token) => {
           throw error 
       });
   };
+
+  export const fetchUsers = async (token) => {
+    return AxiosWrapper.get({
+      endpoint: "users/allusers",token
+    })
+      .then((response) => {
+        return {
+          status:response.status,
+          data:response.data
+        };
+      })
+      .catch((error) => {
+          // return {
+          //     status:error.response.status,
+          //     code:error.code
+          //   };
+          throw error 
+      });
+  };

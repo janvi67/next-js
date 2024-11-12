@@ -14,7 +14,6 @@ export default class AxiosWrapper {
   static retrieveToken = async () => {
     try {
       this.token = await localStorage.getItem("token");
-      
     } catch (e) {
       console.error(e);
     }
@@ -22,16 +21,15 @@ export default class AxiosWrapper {
 
   // Inside ApiConfig.jsx or the AxiosWrapper module
 
-static get = async ({ endpoint, token }) => {
-  const url = `${BASE_URL}${endpoint}`;
+  static get = async ({ endpoint, token }) => {
+    const url = `${BASE_URL}${endpoint}`;
 
-  return axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${token}`, // Use the token here for Authorization
-    },
-  });
-};
-
+    return axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Use the token here for Authorization
+      },
+    });
+  };
 
   static getById = async ({ endpoint, id, filter }) => {
     await AxiosWrapper.retrieveToken();
@@ -53,38 +51,60 @@ static get = async ({ endpoint, token }) => {
     });
   };
 
-  static Registerpost = async ({ endpoint,formData }) => {
+  static Registerpost = async ({ endpoint, formData }) => {
     await AxiosWrapper.retrieveToken();
     return axios.post(`${BASE_URL}${endpoint}`, formData, {
       headers: {
-       "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data",
         Authorization: `${this.token}`,
       },
-
     });
-    
   };
-  static Loginpost = async ({ endpoint,formData }) => {
+  static Loginpost = async ({ endpoint, formData }) => {
     await AxiosWrapper.retrieveToken();
     return axios.post(`${BASE_URL}${endpoint}`, formData, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${this.token}`,
       },
-
     });
+  };
+
+  static Forgetpwdpost = async ({ endpoint, email }) => {
+    return axios.post(
+      `${BASE_URL}${endpoint}`,
+      { email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
+
+  static Resetpwdpost = async ({ endpoint, data }) => {
+    console.log("🚀 ~ AxiosWrapper ~ Resetpwdpost= ~ token:", data)
+    return axios.post(
+      `${BASE_URL}${endpoint}`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     
   };
-  
-  
-  static put = async ({ endpoint,formData }) => {
+
+  static put = async ({ endpoint, formData }) => {
     await AxiosWrapper.retrieveToken();
     let url = `${BASE_URL}${endpoint}`;
-   
-    return axios.put(url,formData, {
+
+    return axios.put(url, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-         Authorization: `Bearer ${this.token}`
+        Authorization: `Bearer ${this.token}`,
       },
     });
   };
@@ -92,11 +112,11 @@ static get = async ({ endpoint, token }) => {
   static delete = async ({ endpoint }) => {
     await AxiosWrapper.retrieveToken();
     let url = `${BASE_URL}${endpoint}`;
-   
-    return axios.delete(url,{
+
+    return axios.delete(url, {
       headers: {
         "Content-Type": "application/json",
-         Authorization: `Bearer ${this.token}`
+        Authorization: `Bearer ${this.token}`,
       },
     });
   };

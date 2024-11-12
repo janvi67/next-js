@@ -1,22 +1,22 @@
-
-"use client"
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
-const ForgetPassword = () => {
+import { ForgetPassword } from "../../../api/Auth";
+import { toast } from "react-toastify";
+
+const Forgetpassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/auth/forgetPassword", { email });
-      setMessage(response.data.message);
-      setError("");
-      router.push("/login"); // Redirect to login page after email is sent
+      const response = await ForgetPassword(email);
+      if (response) {
+        toast.success(response.data.message);
+      }
     } catch (err) {
       setError("Failed to send reset link. Please try again.");
       setMessage("");
@@ -42,4 +42,4 @@ const ForgetPassword = () => {
   );
 };
 
-export default ForgetPassword;
+export default Forgetpassword;

@@ -83,6 +83,14 @@ export default function LoginForm() {
         >
           Register
         </button>
+
+        <button
+          type="button"
+          onClick={() => router.push("/forgetpwd")}
+          className="btn btn-secondary"
+        >
+          forgetPassword
+        </button>
       </form>
     </div>
   );

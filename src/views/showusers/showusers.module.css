@@ -1,0 +1,48 @@
+.userscontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .usercards{
+    display: grid;
+    gap: 50px;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .usercard {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .usercard:hover {
+    transform: scale(1.05);
+  }
+  
+  .profilepic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .userscontainer h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .userscontainer p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 0.9rem;
+  }
+  

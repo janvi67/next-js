@@ -57,9 +57,9 @@ export const getUserProfile = async (token) => {
       });
   };
 
-  export const fetchUsers = async (token) => {
+  export const fetchUsers = async (token,params) => {
     return AxiosWrapper.get({
-      endpoint: "users/allusers",token
+      endpoint: "users/allusers",token,params
     })
       .then((response) => {
         return {

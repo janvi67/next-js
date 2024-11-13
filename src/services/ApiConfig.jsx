@@ -21,9 +21,10 @@ export default class AxiosWrapper {
 
   // Inside ApiConfig.jsx or the AxiosWrapper module
 
-  static get = async ({ endpoint, token }) => {
-    const url = `${BASE_URL}${endpoint}`;
-
+  static get = async ({ endpoint, token, params}) => {
+    const queryString = new URLSearchParams(params).toString();
+  const url = `${BASE_URL}${endpoint}?${queryString}`;
+    
     return axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`, // Use the token here for Authorization
@@ -83,18 +84,13 @@ export default class AxiosWrapper {
   };
 
   static Resetpwdpost = async ({ endpoint, data }) => {
-    console.log("🚀 ~ AxiosWrapper ~ Resetpwdpost= ~ token:", data)
-    return axios.post(
-      `${BASE_URL}${endpoint}`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    
+    console.log("🚀 ~ AxiosWrapper ~ Resetpwdpost= ~ token:", data);
+    return axios.post(`${BASE_URL}${endpoint}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${token}`,
+      },
+    });
   };
 
   static put = async ({ endpoint, formData }) => {

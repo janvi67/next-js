@@ -1,16 +1,28 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 import { ForgetPassword } from "../../../api/Auth";
 import { toast } from "react-toastify";
 
 const Forgetpassword = () => {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required").email("Email is invalid"),
+  });
 
-  const handleSubmit = async (e) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const [email, setEmail] = useState("");
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await ForgetPassword(email);
@@ -26,18 +38,19 @@ const Forgetpassword = () => {
   return (
     <div>
       <h2>Forgot Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
         <button type="submit">Send Reset Link</button>
       </form>
-      {message && <p>{message}</p>}
-      {error && <p>{error}</p>}
     </div>
   );
 };

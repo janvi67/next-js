@@ -1,21 +1,42 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // Using next/navigation for URL params
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { resetPassword } from "../../../api/Auth"; // Import the API call function
+import { resetPassword } from "../../../api/Auth";
 
 const ResetPassword = () => {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const validationSchema = Yup.object().shape({
+    newPassword: Yup.string()
+      .string()
+      .required("new password is required")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        "Must contain 8 characters, one uppercase, one lowercase, one number, and one special character"
+      ),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+      .required("Confirm password is required"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
   const [token, setToken] = useState(null);
   const [error, setError] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams(); // Get URL query parameters
 
   useEffect(() => {
-    // Extract the token from the URL
     const tokenFromUrl = searchParams.get("token");
-    console.log("🚀 ~ useEffect ~ tokenFromUrl:", tokenFromUrl)
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
     } else {
@@ -23,22 +44,12 @@ const ResetPassword = () => {
     }
   }, [searchParams]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Validate the passwords
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
+  const onSubmit = async (data) => {
     try {
-      // Send the reset request to the backend with the token and new password
-      const response = await resetPassword(token, newPassword);
-
+      const response = await resetPassword(token, data.newPassword);
       if (response) {
         toast.success("Password reset successfully.");
-        router.push("/login"); // Redirect to login after successful reset
+        router.push("/login");
       }
     } catch (err) {
       setError("Failed to reset password. Please try again.");
@@ -49,21 +60,23 @@ const ResetPassword = () => {
     <div>
       <h2>Reset Password</h2>
       {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <input
+            type="password"
+            placeholder="New Password"
+            {...register("newPassword")}
+          />
+          {errors.newPassword && <p>{errors.newPassword.message}</p>}
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            {...register("confirmPassword")}
+          />
+          {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+        </div>
         <button type="submit">Reset Password</button>
       </form>
     </div>

@@ -43,9 +43,9 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token"); // Get JWT token from local storage
+        const token = localStorage.getItem("token"); 
         if (!token) {
-          router.push("/login"); // Redirect to login if not logged in
+          router.push("/login"); 
           return;
         }
         const data = await getUserProfile(token);

@@ -45,4 +45,14 @@
     color: #555;
     font-size: 0.9rem;
   }
+  .pagination {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  .pagination button{
+    padding: 15px;
+  }
   

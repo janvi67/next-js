@@ -110,7 +110,6 @@ function RegisterForm() {
       console.log("🚀 ~ onSubmit ~ error.response.data.message:", error);
       toast.error(error || "An error occurred");
 
-      reset();
     }
   };
 

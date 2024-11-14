@@ -34,6 +34,7 @@ export default function ProfilePage() {
       const deletedata = await deleteUser(token);
       if (deletedata) {
         console.log("succees to delete profile");
+        clearAuthData();
         router.push("/");
       }
     } catch (error) {

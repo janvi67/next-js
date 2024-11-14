@@ -1,6 +1,6 @@
 "use client";
 import { fetchUsers } from "@/api/userprofile";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import styles from "./showusers.module.css";
 
@@ -13,27 +13,32 @@ export default function ShowUsers() {
   const [genderFilter, setGenderFilter] = useState("");
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [activeFilter,setActiveFilter]=useState();
   const token = localStorage.getItem("token");
-  const params = {
-    search: searchQuery,
-    sortField: sortField,
-    sortOrder: sortOrder,
-    page,
-    limit:3
-    
-  };
 
-  const pages = new Array(numberOfPages).fill(null).map((_, i) => i);
+  const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
 
 
-  const fetchUserData = async () => {
-   
+  const fetchUserData = useCallback(async () => {
     if (token) {
+      const params = {
+        search: searchQuery,
+        sortField: sortField,
+       sortOrder:sortOrder,
+       gender:genderFilter,
+        page,
+        limit: 3,
+        activeFilter
+      };
+
       try {
         const res = await fetchUsers(token, params);
         const data = res.data;
+        console.log("🚀 ~ fetchUserData ~ data:", data)
+  
         setUsers(data.users);
-        setNumberOfPages(data.totalpages);
+        setNumberOfPages(data.totalPages
+        );
         setLoading(false);
       } catch (error) {
         toast.error("Failed to load users.");
@@ -43,11 +48,12 @@ export default function ShowUsers() {
       toast.error("No token found, please login first.");
       setLoading(false);
     }
-  };
+  }, [token, page, searchQuery, sortField,sortOrder,genderFilter,activeFilter]);
+    
 
   useEffect(() => {
     fetchUserData();
-  }, [token,params]);
+  }, [fetchUserData]);
 
   if (loading) return <h1>Loading...</h1>;
 
@@ -94,7 +100,16 @@ export default function ShowUsers() {
           <option value="asc">Ascending</option>
         </select>
       </div>
-
+     <div>
+     <label className={styles.activeFilter}>
+          <input
+            type="checkbox"
+            checked={activeFilter}
+            onChange={(e) => setActiveFilter(e.target.checked)}
+          />
+          Show Active Users Only
+        </label>
+     </div>
       <div className={styles.usercards}>
         {users.map((user) => (
           <div key={user._id} className={styles.usercard}>
@@ -119,14 +134,10 @@ export default function ShowUsers() {
           Previous
         </button>
         {pages.map((pageIndex) => (
-          <button
-            key={pageIndex}
-            onClick={() => setPage(pageIndex)}
-            className={page === pageIndex ? styles.activePage : ""}
-          >
-            {pageIndex + 1}
-          </button>
-        ))}
+        <button key={pageIndex} onClick={() => setPage(pageIndex)}>
+          {pageIndex + 1}
+        </button>
+      ))}
         <button disabled={page === numberOfPages - 1} onClick={() => setPage(page + 1)}>
           Next
         </button>

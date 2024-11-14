@@ -4,7 +4,7 @@ import "./globals.css";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistedStore } from "../slices/store";
-import Layout from "../layout/page";  // Corrected import
+import Layout from "../layout/page"; // Corrected import
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

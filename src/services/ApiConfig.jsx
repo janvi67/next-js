@@ -21,10 +21,10 @@ export default class AxiosWrapper {
 
   // Inside ApiConfig.jsx or the AxiosWrapper module
 
-  static get = async ({ endpoint, token, params}) => {
+  static get = async ({ endpoint, token, params }) => {
     const queryString = new URLSearchParams(params).toString();
-  const url = `${BASE_URL}${endpoint}?${queryString}`;
-    
+    const url = `${BASE_URL}${endpoint}?${queryString}`;
+
     return axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`, // Use the token here for Authorization
@@ -110,6 +110,16 @@ export default class AxiosWrapper {
     let url = `${BASE_URL}${endpoint}`;
 
     return axios.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+  };
+
+  static getFamilyMember = async ({ endpoint, payload }) => {
+    await AxiosWrapper.retrieveToken();
+    return axios.post(`${BASE_URL}${endpoint}`, payload, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.token}`,

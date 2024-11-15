@@ -8,6 +8,7 @@ export default function ShowUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
+  const[limit,setLimit]=useState(1);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
@@ -27,7 +28,7 @@ export default function ShowUsers() {
        sortOrder:sortOrder,
        gender:genderFilter,
         page,
-        limit: 3,
+        limit,
         activeFilter
       };
 
@@ -48,7 +49,7 @@ export default function ShowUsers() {
       toast.error("No token found, please login first.");
       setLoading(false);
     }
-  }, [token, page, searchQuery, sortField,sortOrder,genderFilter,activeFilter]);
+  }, [token, page, searchQuery, sortField,sortOrder,genderFilter,activeFilter,limit]);
     
 
   useEffect(() => {
@@ -99,9 +100,20 @@ export default function ShowUsers() {
           <option value="desc">Descending</option>
           <option value="asc">Ascending</option>
         </select>
-      </div>
-     <div>
-     <label className={styles.activeFilter}>
+
+        <select
+          value={limit}
+          onChange={(e) => setLimit(e.target.value)}
+          className={styles.filterSelect}
+        >
+          <option value="">limits</option>
+          <option>1</option>
+          <option >2</option>
+          <option >3</option>
+          <option >4</option>
+        </select>
+
+        <label className={styles.activeFilter}>
           <input
             type="checkbox"
             checked={activeFilter}
@@ -109,7 +121,13 @@ export default function ShowUsers() {
           />
           Show Active Users Only
         </label>
+      </div>
+     <div>
+     
      </div>
+   
+
+     
       <div className={styles.usercards}>
         {users.map((user) => (
           <div key={user._id} className={styles.usercard}>

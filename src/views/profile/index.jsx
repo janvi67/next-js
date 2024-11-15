@@ -106,6 +106,9 @@ export default function ProfilePage() {
       </button>
       <button type="submit" onClick={deleteProfile}>
         delete Profile
+      </button>
+      <button type="submit" onClick={()=>router.push("/familyDetails")}>
+        Add FamilyDetails
       </button><br/>
       <button type="submit" onClick={handleLogout} className={styles.logout}>
         Logout

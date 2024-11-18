@@ -19,9 +19,9 @@ export const getUserProfile = async (token) => {
       });
   };
   
-  export const UpdateUser = async (formData,token) => {
+  export const UpdateUser = async (formData) => {
     return AxiosWrapper.put({
-      endpoint: "users/profile/update",formData,token
+      endpoint: "users/profile/update",formData
     })
       .then((response) => {
         return {

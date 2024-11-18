@@ -55,7 +55,7 @@ export default function LoginForm() {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      toast.error("Login failed");
+      toast.error("Invalid login data");
       reset();
     }
   };

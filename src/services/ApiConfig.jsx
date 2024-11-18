@@ -32,6 +32,8 @@ export default class AxiosWrapper {
     });
   };
 
+ 
+
   static getById = async ({ endpoint, id, filter }) => {
     await AxiosWrapper.retrieveToken();
     let url = `${BASE_URL}${endpoint}/${id}`;

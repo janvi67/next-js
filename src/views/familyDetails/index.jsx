@@ -1,34 +1,35 @@
-   
 "use client";
 import React from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
-import styles from "./familyDetails.module.css";
-import {addFamilyDetails} from '../../api/familyDetails'
+import { useForm, useFieldArray } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import styles from "./familyDetails.module.css";
 
 function FamilyDetails() {
-  const { register, control, handleSubmit,reset } = useForm({
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Extract initial data passed through navigation state
+  const initialData = JSON.parse(searchParams.get("data")) || null;
+
+  const { register, control, handleSubmit, reset } = useForm({
     defaultValues: {
-      familyMembers: [{ firstname: "", lastname: "", relationship: "", age: "" }],
+      familyMembers: initialData?.familyMembers || [
+        { firstname: "", lastname: "", relationship: "", age: "" },
+      ],
     },
   });
 
-  const { fields, append, prepend, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "familyMembers",
   });
 
-  const onSubmit =async (data) => {
-   console.log("🚀 ~ onSubmit ~ data:", data)
-   
- 
-    const response = await addFamilyDetails({ familyMembers: data.familyMembers });
-    console.log("🚀 ~ onSubmit ~ response :", response )
-    if(response){
-        reset()
-        toast.success("sucessfully saved familymembers data")
-    }
-  
+  const onSubmit = (data) => {
+    toast.success("Saved your family details successfully");
+
+    // Pass data to the update profile page
+    router.push(`/profile/updateProfile`);
   };
 
   return (
@@ -38,36 +39,39 @@ function FamilyDetails() {
         {fields.map((item, index) => (
           <div key={item.id} className={styles.familyMember}>
             <h3>Family Member {index + 1}</h3>
-
             <label>First Name</label>
             <input
-              {...register(`familyMembers.${index}.firstname`, { required: "First name is required" })}
+              {...register(`familyMembers.${index}.firstname`, {
+                required: "First name is required",
+              })}
               placeholder="First Name"
               className={styles.input}
             />
-
             <label>Last Name</label>
             <input
-              {...register(`familyMembers.${index}.lastname`, { required: "Last name is required" })}
+              {...register(`familyMembers.${index}.lastname`, {
+                required: "Last name is required",
+              })}
               placeholder="Last Name"
               className={styles.input}
             />
-
             <label>Relationship</label>
             <input
-              {...register(`familyMembers.${index}.relationship`, { required: "Relationship is required" })}
-              placeholder="Relationship (e.g., Father, Sister)"
+              {...register(`familyMembers.${index}.relationship`, {
+                required: "Relationship is required",
+              })}
+              placeholder="Relationship"
               className={styles.input}
             />
-
             <label>Age</label>
             <input
               type="number"
-              {...register(`familyMembers.${index}.age`, { required: "Age is required" })}
+              {...register(`familyMembers.${index}.age`, {
+                required: "Age is required",
+              })}
               placeholder="Age"
               className={styles.input}
             />
-
             <button
               type="button"
               onClick={() => remove(index)}
@@ -81,18 +85,12 @@ function FamilyDetails() {
         <div className={styles.buttonGroup}>
           <button
             type="button"
-            onClick={() => append({ firstname: "", lastname: "", relationship: "", age: "" })}
+            onClick={() =>
+              append({ firstname: "", lastname: "", relationship: "", age: "" })
+            }
             className={styles.appendButton}
           >
             Add Member
-          </button>
-
-          <button
-            type="button"
-            onClick={() => prepend({ firstname: "", lastname: "", relationship: "", age: "" })}
-            className={styles.prependButton}
-          >
-            Add Member at Start
           </button>
         </div>
 
@@ -105,9 +103,3 @@ function FamilyDetails() {
 }
 
 export default FamilyDetails;
-
-
-
-
-
-

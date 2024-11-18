@@ -112,7 +112,7 @@ function RegisterForm() {
 
     }
   };
-
+  const today = new Date().toISOString().split("T")[0];
   return (
     <div className={styles.registerform}>
       <h5 className="card-header">Next.js - Form Validation Example</h5>
@@ -131,7 +131,7 @@ function RegisterForm() {
           <div className="form-row">
             <div className="form-group col">
               <label>Date of Birth</label>
-              <input {...register("dob")} type="date" />
+              <input {...register("dob")} type="date"  max={today}/>
               {errors.dob && (
                 <p className={styles.error}>{errors.dob.message}</p>
               )}

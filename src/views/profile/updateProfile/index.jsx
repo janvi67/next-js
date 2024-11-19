@@ -7,6 +7,7 @@ import { getUserProfile, UpdateUser } from "@/api/userprofile";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+
 const ProfileUpdate = () => {
   // Validation schema for family members
   const schema = yup.object().shape({
@@ -20,41 +21,6 @@ const ProfileUpdate = () => {
         "Date of Birth must be in the format YYYY-MM-DD"
       ),
     gender: yup.string().required("Gender is required"),
-    profilepic: yup
-      .mixed()
-      .test("fileType", "Invalid file types!", function (value) {
-        console.log("🚀 ~ schema ~ value:", value);
-
-        if (!value || value.length === 0) {
-          return this.createError({ message: "profilepic  is required" });
-        }
-
-        if (typeof value === "string" && isValidUrl(value)) {
-          return true;
-        }
-
-        const allowedExtensions = /(jpeg|jpg|png|pdf)$/;
-        const maxSize = 1 * 1024 * 1024;
-
-        for (const file of value) {
-          const extension = (file.type || "").split("/").pop();
-          const size = file.size || 0;
-
-          if (!allowedExtensions.test(extension)) {
-            return this.createError({
-              message: "Invalid file types. allow only image!",
-            });
-          }
-
-          if (size > maxSize) {
-            return this.createError({
-              message: "File size should be less than 1MB!",
-            });
-          }
-        }
-
-        return true;
-      }),
 
     familyMembers: yup
       .array()
@@ -94,7 +60,7 @@ const ProfileUpdate = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showFamilyDetails, setShowFamilyDetails] = useState(false);
- 
+  const [loading,setLoading]=useState(false)
 
   const router = useRouter();
 
@@ -102,17 +68,14 @@ const ProfileUpdate = () => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem("token");
       try {
-        const profileData = await getUserProfile(token);
-      
-
+        const profileData = await getUserProfile(token);    
         setValue("username", profileData.data.username);
         setValue(
           "dob",
           new Date(profileData.data.dob).toISOString().split("T")[0]
         );
         setValue("gender", profileData.data.gender);
-        // setValue("familyMembers", profileData.data.familyMembers || []);
-
+        setValue("familyMembers", profileData.data.familyMembers || []);
       } catch (error) {
         setErrorMessage("Failed to load user data");
       }
@@ -121,39 +84,35 @@ const ProfileUpdate = () => {
     fetchUserProfile();
   }, [setValue]);
 
-  const handleFamilySubmit = () => {
-    const value = watch("familyMembers");
-    setValue("familyMembers", value);
-    setShowFamilyDetails(true);
-  };
-
   const onSubmit = async (data) => {
     try {
+      setLoading(true)
       const formData = new FormData();
       formData.append("username", data.username);
       formData.append("dob", data.dob);
       formData.append("gender", data.gender);
-      if (data.profilepic[0]) {
-        formData.append("profilepic", data.profilepic[0]);
-      }
+      
+        formData.append("profilepic", data.profilePic[0]);
+
       formData.append("familyMembers", JSON.stringify(data.familyMembers));
 
       const response = await UpdateUser(formData);
-      console.log("🚀 ~ onSubmit ~ response:", response)
+      console.log("🚀 ~ onSubmit ~ response:", response);
       if (response) {
         setSuccessMessage("Profile updated successfully!");
         router.push("/profile");
       } else {
         setErrorMessage("Something went wrong while updating the profile.");
       }
-
       console.log("error", errors);
-      
     } catch (error) {
       setErrorMessage("Error updating profile");
     }
+    finally{
+      setLoading(false)
+    }
   };
-  
+
   return (
     <div className={styles.updateProfile}>
       <h2>Update Profile</h2>
@@ -191,43 +150,39 @@ const ProfileUpdate = () => {
 
         <div>
           <label>Profile Picture:</label>
-          <input type="file" accept="image/*" {...register("profilepic")} />
-          {errors.profilepic && (
+          <input type="file" accept="image/*" {...register("profilePic")} />
+          {errors.profilePic && (
             <p className={styles.error}>{errors.profilepic.message}</p>
           )}
         </div>
 
         <div>
           <label>Family Details:</label>
-          <p>showFamilyDetails</p>
+          <p style={{color:"green"}}>showFamilyDetails</p>
 
-          {fields.length>0  ?(
-
-          
-          <ul>
-        {fields.map((member,index)=>{
-          <li key={member.id}>
-          <div>
-        <label>Firstname:</label>
-        <input
-          type="text"
-          {...register(`familyMembers.${index}.firstname`)}
-          defaultValue={member.firstname} // Show stored value
-        />
-      </div>
-          </li>
-        })}
-          </ul>
-      
-          ):(
+          {fields.length > 0 ? (
+            <ul>
+              {fields.map((member, index) => {
+                <li key={member.id}>
+                  <div>
+                    <label>Firstname:</label>
+                    <input
+                      type="text"
+                      {...register(`familyMembers.${index}.firstname`)}
+                      defaultValue={member.firstname} // Show stored value
+                    />
+                  </div>
+                </li>;
+              })}
+            </ul>
+          ) : (
             <p>no family members added yet</p>
           )}
 
           {showFamilyDetails ? (
-            
-            <ul>
+            <ul className={styles.familymembers}>
               {fields.map((member, index) => (
-                <li key={index}>
+                <li className={styles.familymemberlist} key={index}>
                   Firstname: {member.firstname}, Lastname: {member.lastname},
                   Relationship: {member.relationship}, Age: {member.age}
                 </li>
@@ -305,14 +260,11 @@ const ProfileUpdate = () => {
               >
                 Add Family Member
               </button>
-              <button type="button" onClick={handleFamilySubmit}>
-                Submit Family Details
-              </button>
             </>
           )}
         </div>
 
-        <button type="submit">Update Profile</button>
+        <button type="submit" disabled={loading}>{loading? "Logging  in...":"Update Profile"} </button>
       </form>
     </div>
   );

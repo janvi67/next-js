@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {RegisterUser} from '../../../api/Auth'
+import { RegisterUser } from "../../../api/Auth";
 
 function RegisterForm() {
   // Validation schema with Yup
@@ -67,13 +67,14 @@ function RegisterForm() {
       }
     ),
   });
- 
+
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { register, handleSubmit, reset, formState } = useForm(formOptions);
   const { errors } = formState;
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -96,6 +97,8 @@ function RegisterForm() {
       } else {
         console.log("something went wrong");
       }
+      if (loading) return;
+      setLoading(true);
       const response = await RegisterUser(formData);
 
       if (response.data) {
@@ -109,7 +112,9 @@ function RegisterForm() {
     } catch (error) {
       console.log("🚀 ~ onSubmit ~ error.response.data.message:", error);
       toast.error(error || "An error occurred");
-
+    }
+    finally{
+      setLoading(false)
     }
   };
   const today = new Date().toISOString().split("T")[0];
@@ -131,7 +136,7 @@ function RegisterForm() {
           <div className="form-row">
             <div className="form-group col">
               <label>Date of Birth</label>
-              <input {...register("dob")} type="date"  max={today}/>
+              <input {...register("dob")} type="date" max={today} />
               {errors.dob && (
                 <p className={styles.error}>{errors.dob.message}</p>
               )}
@@ -153,12 +158,11 @@ function RegisterForm() {
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
                 />
-                  {isMounted && ( // Conditional rendering of toggle button
+                {isMounted && ( // Conditional rendering of toggle button
                   <button type="button" onClick={togglePasswordVisibility}>
                     {showPassword ? <FaEye /> : <FaEyeSlash />}
                   </button>
                 )}
-              
               </div>
               {errors.password && (
                 <p className={styles.error}>{errors.password.message}</p>
@@ -215,8 +219,8 @@ function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-1">
-              Register
+            <button type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Register"}
             </button>
             <button
               type="button"
@@ -227,6 +231,7 @@ function RegisterForm() {
             </button>
           </div>
         </form>
+        {loading && <p className={styles.loadingMessage}>Please wait...</p>}
       </div>
     </div>
   );

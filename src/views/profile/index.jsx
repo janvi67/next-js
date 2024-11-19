@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleLogout = () => {
@@ -19,9 +19,11 @@ export default function ProfilePage() {
     router.push("/login");
   };
   const editprofile = () => {
+    setLoading(true)
     router.push("/profile/updateProfile");
   };
   const deleteProfile = async () => {
+    setLoading(true)
     const confirmed = confirm("Are you sure you want to delete your account? ");
     if (!confirmed) return;
 
@@ -40,6 +42,9 @@ export default function ProfilePage() {
     } catch (error) {
       console.log("delete user", error);
     }
+   finally{
+    setLoading(false)
+   }
   };
   useEffect(() => {
     const fetchProfile = async () => {
@@ -51,7 +56,6 @@ export default function ProfilePage() {
         }
         const data = await getUserProfile(token);
         setProfile(data);
-        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch profile data:", error);
       }
@@ -60,9 +64,7 @@ export default function ProfilePage() {
     fetchProfile();
   }, [router]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  
 
   if (!profile) {
     return <p>Profile not found.</p>;
@@ -101,15 +103,13 @@ export default function ProfilePage() {
       </p>
 
       <br />
-      <button type="submit" onClick={editprofile}>
-        Edit Profile
+      <button type="submit" disabled={loading} onClick={editprofile}>
+      {loading ? "Logging in..." : "Edit Profile"}
       </button>
-      <button type="submit" onClick={deleteProfile}>
-        delete Profile
+      <button type="submit" disabled={loading} onClick={deleteProfile}>
+      {loading ? "Logging in..." : "Delete Profile"}
       </button>
-      <button type="submit" onClick={()=>router.push("/familyDetails")}>
-        Add FamilyDetails
-      </button><br/>
+     <br/>
       <button type="submit" onClick={handleLogout} className={styles.logout}>
         Logout
       </button>

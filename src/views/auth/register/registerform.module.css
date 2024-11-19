@@ -48,3 +48,9 @@
   background: none;
   border: none;
 }
+.loadingMessage {
+  color: #0070f3;
+  font-size: 54px;
+  margin-top: 10px;
+  text-align: center;
+}

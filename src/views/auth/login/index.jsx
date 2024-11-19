@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,11 +32,13 @@ export default function LoginForm() {
   });
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (formData) => {
-    console.log("🚀 ~ onSubmit ~ data:", formData);
     try {
+      if (loading) return;
+      setLoading(true);
       const response = await LoginUser(formData);
-      console.log("🚀 ~ onSubmit ~ response:", response.data.accesstoken);
       const token = response?.data?.accesstoken;
 
       if (token) {
@@ -57,6 +59,8 @@ export default function LoginForm() {
       console.error("Login failed:", error);
       toast.error("Invalid login data");
       reset();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +79,9 @@ export default function LoginForm() {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
         <button
           type="button"
           onClick={() => router.push("/register")}
@@ -92,6 +98,7 @@ export default function LoginForm() {
           forgetPassword
         </button>
       </form>
+      {loading && <p className={styles.loadingMessage}>Please wait...</p>}
     </div>
   );
 }

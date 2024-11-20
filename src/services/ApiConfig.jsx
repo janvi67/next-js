@@ -1,15 +1,10 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
 
-// console.log("BASEURL",BASE_URL)
-// console.log("BASE_URL", BASE_URL);
-
 export default class AxiosWrapper {
   static token = null;
 
-  constructor() {
-    // AxiosWrapper.retrieveToken()
-  }
+  constructor() {}
 
   static retrieveToken = async () => {
     try {
@@ -32,27 +27,25 @@ export default class AxiosWrapper {
     });
   };
 
- 
-
-  static getById = async ({ endpoint, id, filter }) => {
-    await AxiosWrapper.retrieveToken();
-    let url = `${BASE_URL}${endpoint}/${id}`;
-    const searchParams = [];
-    let params;
-    if (filter) {
-      searchParams.push(`${filter}=time`);
-    }
-    if (searchParams.length > 0) {
-      params = searchParams.join("&");
-      url = url + "?" + params;
-    }
-    return axios.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  };
+  // static getById = async ({ endpoint, id, filter }) => {
+  //   await AxiosWrapper.retrieveToken();
+  //   let url = `${BASE_URL}${endpoint}/${id}`;
+  //   const searchParams = [];
+  //   let params;
+  //   if (filter) {
+  //     searchParams.push(`${filter}=time`);
+  //   }
+  //   if (searchParams.length > 0) {
+  //     params = searchParams.join("&");
+  //     url = url + "?" + params;
+  //   }
+  //   return axios.get(url, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  // };
 
   static Registerpost = async ({ endpoint, formData }) => {
     await AxiosWrapper.retrieveToken();
@@ -73,16 +66,12 @@ export default class AxiosWrapper {
     });
   };
 
-  static Forgetpwdpost = async ({ endpoint, email }) => {
-    return axios.post(
-      `${BASE_URL}${endpoint}`,
-      { email },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  static Forgetpwdpost = async ({ endpoint, data }) => {
+    return axios.post(`${BASE_URL}${endpoint}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
   static Resetpwdpost = async ({ endpoint, data }) => {
@@ -129,3 +118,6 @@ export default class AxiosWrapper {
     });
   };
 }
+export const clearAuthData = () => {
+  localStorage.removeItem("token");
+};

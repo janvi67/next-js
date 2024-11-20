@@ -1,0 +1,35 @@
+.resetpwd{
+    left: 50%;
+    top: 50%;
+    margin-left: -7%;
+    position: absolute;
+    margin-top: -17%;
+}
+
+.resetpwd button{
+    padding: 0.5rem;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 30px;
+    margin-top: 20px;
+}
+.resetpwd button:hover{
+    background-color: #005bb5;
+}
+
+.resetpwd p{
+    color: red;
+    font-size: 0.875rem;
+}
+.resetpwd input{
+margin-top: 20px;
+}
+.resetpwd .loadingMessage{
+    color: #0070f3;
+    font-size: 54px;
+    margin-top: 10px;
+    text-align: center;
+}

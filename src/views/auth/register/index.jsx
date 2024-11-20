@@ -73,10 +73,13 @@ function RegisterForm() {
   const { errors } = formState;
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const togglePasswordVisibilitycp = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   useEffect(() => {
     setIsMounted(true);
@@ -95,7 +98,7 @@ function RegisterForm() {
       if (data.profilepic[0] && data.profilepic) {
         formData.append("profilepic", data.profilepic[0]);
       } else {
-        console.log("something went wrong");
+        toast.error("something went wrong");
       }
       if (loading) return;
       setLoading(true);
@@ -109,12 +112,18 @@ function RegisterForm() {
         setTimeout(() => router.push("/login"), 2000);
         console.log("sucess");
       }
+      if (err.response?.status === 409) {
+        toast.error("User already exists. Please use a different email.");
+      }
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error.response.data.message:", error);
-      toast.error(error || "An error occurred");
-    }
-    finally{
-      setLoading(false)
+      if (error.response?.status === 409) {
+        toast.error("User already exists. Please use a different email.");
+      } else {
+        toast.error("something is wrong please try again later...");
+        console.log(error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
   const today = new Date().toISOString().split("T")[0];
@@ -168,10 +177,22 @@ function RegisterForm() {
                 <p className={styles.error}>{errors.password.message}</p>
               )}
             </div>
+          </div>
+          <div className="form-row">
             <div className="form-group col">
               <label>Confirm Password</label>
-              <input {...register("confirmPassword")} type="password" />
-              {errors.confirmPassword && (
+              <div className={styles.passwordWrapper}>
+                <input
+                  {...register("confirmPassword")}
+                  type={showConfirmPassword ? "text" : "password"}
+                />
+                {isMounted && ( // Conditional rendering of toggle button
+                  <button type="button" onClick={togglePasswordVisibilitycp}>
+                    {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                  </button>
+                )}
+              </div>
+              {errors.password && (
                 <p className={styles.error}>{errors.confirmPassword.message}</p>
               )}
             </div>
@@ -228,6 +249,13 @@ function RegisterForm() {
               className="btn btn-secondary"
             >
               Login
+            </button>
+            <button
+              type="button"
+              onClick={() => reset()}
+              className="btn btn-secondary"
+            >
+              Reset
             </button>
           </div>
         </form>

@@ -29,3 +29,13 @@
   .logout:hover {
     background-color: #005bb5;
   }
+  .profileNotFound{
+    left: 50%;
+    top: 50%;
+    margin-left: -7%;
+    position: absolute;
+    margin-top: -17%;
+    color: #121213;
+    font-size: 54px;
+    text-align: center;
+  }

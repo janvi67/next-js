@@ -43,7 +43,7 @@ export const LoginUser = async (formData) => {
 export const ForgetPassword = async (email) => {
   return AxiosWrapper.Forgetpwdpost({
     endpoint: "users/forgetPassword",
-    email,
+   data:{email},
   });
 };
 

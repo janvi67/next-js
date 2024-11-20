@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteUser, getUserProfile } from "../../api/userprofile";
-import { clearAuthData } from "../../utils/Auth";
+import { clearAuthData } from "@/services/ApiConfig";
 import styles from "./profile.module.css";
 import { toast } from "react-toastify";
 
@@ -51,6 +51,7 @@ export default function ProfilePage() {
       try {
         const token = localStorage.getItem("token"); 
         if (!token) {
+          toast.error("profile not found")
           router.push("/login"); 
           return;
         }
@@ -67,7 +68,8 @@ export default function ProfilePage() {
   
 
   if (!profile) {
-    return <p>Profile not found.</p>;
+    return <p className={styles.profileNotFound}>Profile not found.</p>;
+   
   }
   console.log(
     "🚀 ~ ProfilePage ~ profile.profilepic:",

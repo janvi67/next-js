@@ -1,12 +1,41 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
 import styles from "./page.module.css";
 
-export default function Home() {
+const HomePage = () => {
   return (
-    <div className={styles.page}>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Welcome to My Project</h1>
+        <p className={styles.subtitle}>A modern platform for your needs</p>
+      </header>
+
+      <nav className={styles.nav}>
+        <Link href="/login" className={styles.navLink}>
+          Login
+        </Link>
+        <Link href="/register" className={styles.navLink}>
+          Register
+        </Link>
+        <Link href="/about" className={styles.navLink}>
+          About Us
+        </Link>
+      </nav>
+
       <main className={styles.main}>
-      <h1>home page</h1>
+        <h2>Explore Features</h2>
+        <p>
+          This platform provides an efficient way to manage your data, create
+          user accounts, and explore exciting features tailored to your needs.
+        </p>
       </main>
-     </div>
+
+      <footer className={styles.footer}>
+        <p>© {new Date().getFullYear()} My Project. All Rights Reserved.</p>
+      </footer>
+    </div>
   );
-}
+};
+
+export default HomePage;

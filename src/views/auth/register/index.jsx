@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { RegisterUser } from "../../../api/Auth";
 
 function RegisterForm() {
-  // Validation schema with Yup
+
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username  is required"),
 
@@ -88,7 +88,6 @@ function RegisterForm() {
     try {
       const formData = new FormData();
 
-      // Append other form fields
       formData.append("username", data.username);
       formData.append("dob", data.dob);
       formData.append("email", data.email);
@@ -112,16 +111,18 @@ function RegisterForm() {
         setTimeout(() => router.push("/login"), 2000);
         console.log("sucess");
       }
-      if (err.response?.status === 409) {
-        toast.error("User already exists. Please use a different email.");
-      }
     } catch (error) {
-      if (error.response?.status === 409) {
-        toast.error("User already exists. Please use a different email.");
+      if (error.response) {
+        if (error.response?.status === 409) {
+          toast.error("User already exists. Please use a different email.");
+        } else {
+          toast.error("something went wrong");
+        }
       } else {
-        toast.error("something is wrong please try again later...");
-        console.log(error.message);
+        toast.error("registration fail");
       }
+
+      toast.error("something is wrong please try again later...");
     } finally {
       setLoading(false);
     }
@@ -167,7 +168,7 @@ function RegisterForm() {
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
                 />
-                {isMounted && ( // Conditional rendering of toggle button
+                {isMounted && (
                   <button type="button" onClick={togglePasswordVisibility}>
                     {showPassword ? <FaEye /> : <FaEyeSlash />}
                   </button>
@@ -186,7 +187,7 @@ function RegisterForm() {
                   {...register("confirmPassword")}
                   type={showConfirmPassword ? "text" : "password"}
                 />
-                {isMounted && ( // Conditional rendering of toggle button
+                {isMounted && ( 
                   <button type="button" onClick={togglePasswordVisibilitycp}>
                     {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
                   </button>

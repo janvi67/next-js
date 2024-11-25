@@ -3,54 +3,72 @@ import { fetchUsers } from "@/api/userprofile";
 import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import styles from "./showusers.module.css";
+import Cookie from 'universal-cookie'
 
-export default function ShowUsers() {
+export default function ShowUsers(req) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const[limit,setLimit]=useState(1);
+  const [limit, setLimit] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [activeFilter,setActiveFilter]=useState();
-  const token = localStorage.getItem("token");
+  const [activeFilter, setActiveFilter] = useState();
+  
 
   const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
-
+  var cookie =new Cookie();
+  const token=cookie.get("token")
 
   const fetchUserData = useCallback(async () => {
     if (token) {
       const params = {
         search: searchQuery,
         sortField: sortField,
-       sortOrder:sortOrder,
-       gender:genderFilter,
+        sortOrder: sortOrder,
+        gender: genderFilter,
         page,
         limit,
-        activeFilter
+        activeFilter,
       };
 
       try {
         const res = await fetchUsers(token, params);
         const data = res.data;
-        console.log("🚀 ~ fetchUserData ~ data:", data)
-  
+        console.log("🚀 ~ fetchUserData ~ data:", data);
+
         setUsers(data.users);
-        setNumberOfPages(data.totalPages
-        );
+        setNumberOfPages(data.totalPages);
         setLoading(false);
       } catch (error) {
-        toast.error("Failed to load users.");
+        if (error.response) {
+          if (error.response.status === 403) {
+            toast.error("You have no access to show this page.");
+          } else {
+            toast.error("Failed to load users.");
+          }
+        } else {
+          toast.error("profile data not found .");
+        }
+
         setLoading(false);
       }
     } else {
       toast.error("No token found, please login first.");
       setLoading(false);
     }
-  }, [token, page, searchQuery, sortField,sortOrder,genderFilter,activeFilter,limit]);
-    
+  }, [
+    token,
+    page,
+    searchQuery,
+    sortField,
+    sortOrder,
+    genderFilter,
+    activeFilter,
+    limit,
+  ]);
 
   useEffect(() => {
     fetchUserData();
@@ -108,9 +126,9 @@ export default function ShowUsers() {
         >
           <option value="">limits</option>
           <option>1</option>
-          <option >2</option>
-          <option >3</option>
-          <option >4</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
         </select>
 
         <label className={styles.activeFilter}>
@@ -122,16 +140,16 @@ export default function ShowUsers() {
           Show Active Users Only
         </label>
       </div>
-     <div>
-     
-     </div>
-   
+      <div></div>
 
-     
       <div className={styles.usercards}>
         {users.map((user) => (
           <div key={user._id} className={styles.usercard}>
-            <img src={user.profilepic} alt="Profile" className={styles.profilepic} />
+            <img
+              src={user.profilepic}
+              alt="Profile"
+              className={styles.profilepic}
+            />
             <h3>{user.username}</h3>
             <p>Email: {user.email}</p>
             <p>
@@ -152,11 +170,14 @@ export default function ShowUsers() {
           Previous
         </button>
         {pages.map((pageIndex) => (
-        <button key={pageIndex} onClick={() => setPage(pageIndex)}>
-          {pageIndex + 1}
-        </button>
-      ))}
-        <button disabled={page === numberOfPages - 1} onClick={() => setPage(page + 1)}>
+          <button key={pageIndex} onClick={() => setPage(pageIndex)}>
+            {pageIndex + 1}
+          </button>
+        ))}
+        <button
+          disabled={page === numberOfPages - 1}
+          onClick={() => setPage(page + 1)}
+        >
           Next
         </button>
       </div>

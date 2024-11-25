@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { getUserProfile, UpdateUser } from "@/api/userprofile";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import Cookie from "universal-cookie";
 
 const ProfileUpdate = () => {
   // Validation schema for family members
@@ -41,13 +41,9 @@ const ProfileUpdate = () => {
   const {
     register,
     handleSubmit,
-    isValidUrl,
     control,
     setValue,
-    getValues,
-    trigger,
-    watch,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -60,15 +56,16 @@ const ProfileUpdate = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showFamilyDetails, setShowFamilyDetails] = useState(false);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  var cookie = new Cookie();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const token = localStorage.getItem("token");
+      const token = cookie.get("token");
       try {
-        const profileData = await getUserProfile(token);    
+        const profileData = await getUserProfile(token);
         setValue("username", profileData.data.username);
         setValue(
           "dob",
@@ -86,13 +83,13 @@ const ProfileUpdate = () => {
 
   const onSubmit = async (data) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const formData = new FormData();
       formData.append("username", data.username);
       formData.append("dob", data.dob);
       formData.append("gender", data.gender);
-      
-        formData.append("profilepic", data.profilePic[0]);
+
+      formData.append("profilepic", data.profilePic[0]);
 
       formData.append("familyMembers", JSON.stringify(data.familyMembers));
 
@@ -107,9 +104,8 @@ const ProfileUpdate = () => {
       console.log("error", errors);
     } catch (error) {
       setErrorMessage("Error updating profile");
-    }
-    finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -158,7 +154,7 @@ const ProfileUpdate = () => {
 
         <div>
           <label>Family Details:</label>
-          <p style={{color:"green"}}>showFamilyDetails</p>
+          <p style={{ color: "green" }}>showFamilyDetails</p>
 
           {fields.length > 0 ? (
             <ul>
@@ -169,7 +165,7 @@ const ProfileUpdate = () => {
                     <input
                       type="text"
                       {...register(`familyMembers.${index}.firstname`)}
-                      defaultValue={member.firstname} // Show stored value
+                      defaultValue={member.firstname}
                     />
                   </div>
                 </li>;
@@ -264,7 +260,9 @@ const ProfileUpdate = () => {
           )}
         </div>
 
-        <button type="submit" disabled={loading}>{loading? "Logging  in...":"Update Profile"} </button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging  in..." : "Update Profile"}{" "}
+        </button>
       </form>
     </div>
   );

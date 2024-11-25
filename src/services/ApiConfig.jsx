@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
+import Cookie from "universal-cookie";
 
 export default class AxiosWrapper {
   static token = null;
@@ -7,8 +8,9 @@ export default class AxiosWrapper {
   constructor() {}
 
   static retrieveToken = async () => {
+    var cookie = new Cookie();
     try {
-      this.token = await localStorage.getItem("token");
+      this.token = await cookie.get("token");
     } catch (e) {
       console.error(e);
     }
@@ -79,7 +81,7 @@ export default class AxiosWrapper {
     return axios.post(`${BASE_URL}${endpoint}`, data, {
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
+       
       },
     });
   };

@@ -38,9 +38,9 @@ export const getUserProfile = async (token) => {
       });
   };
 
-  export const deleteUser = async (token) => {
+  export const deleteUser = async () => {
     return AxiosWrapper.delete({
-      endpoint: "users/profile/delete",token
+      endpoint: "users/profile/delete"
     })
       .then((response) => {
         return {

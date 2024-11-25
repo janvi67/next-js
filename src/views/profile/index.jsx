@@ -3,58 +3,52 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteUser, getUserProfile } from "../../api/userprofile";
-import { clearAuthData } from "@/services/ApiConfig";
 import styles from "./profile.module.css";
 import { toast } from "react-toastify";
+import Cookie from "universal-cookie";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  var cookie = new Cookie();
 
   const handleLogout = () => {
-   
-    clearAuthData();
-    toast.success("user logout sucessfully")
+    cookie.remove("token", { path: "/" });
+    cookie.remove("role", { path: "/" });
+    cookies.remove("cloudinaryUrl", { path: "/" });
+    toast.success("user logout sucessfully");
     router.push("/login");
   };
   const editprofile = () => {
-    setLoading(true)
+    setLoading(true);
     router.push("/profile/updateProfile");
   };
   const deleteProfile = async () => {
-    setLoading(true)
+    setLoading(true);
     const confirmed = confirm("Are you sure you want to delete your account? ");
     if (!confirmed) return;
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setErrorMessage("Authentication token not found.");
-        return;
-      }
-      const deletedata = await deleteUser(token);
+     
+      const deletedata = await deleteUser();
       if (deletedata) {
         console.log("succees to delete profile");
-        clearAuthData();
+        cookie.remove("token", { path: "/" });
+        cookie.remove("role", { path: "/" });
         router.push("/");
       }
     } catch (error) {
       console.log("delete user", error);
+    } finally {
+      setLoading(false);
     }
-   finally{
-    setLoading(false)
-   }
   };
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token"); 
-        if (!token) {
-          toast.error("profile not found")
-          router.push("/login"); 
-          return;
-        }
+        const token = cookie.get("token");
+
         const data = await getUserProfile(token);
         setProfile(data);
       } catch (error) {
@@ -65,11 +59,8 @@ export default function ProfilePage() {
     fetchProfile();
   }, [router]);
 
-  
-
   if (!profile) {
     return <p className={styles.profileNotFound}>Profile not found.</p>;
-   
   }
   console.log(
     "🚀 ~ ProfilePage ~ profile.profilepic:",
@@ -106,12 +97,12 @@ export default function ProfilePage() {
 
       <br />
       <button type="submit" disabled={loading} onClick={editprofile}>
-      {loading ? "Logging in..." : "Edit Profile"}
+        {loading ? "Logging in..." : "Edit Profile"}
       </button>
       <button type="submit" disabled={loading} onClick={deleteProfile}>
-      {loading ? "Logging in..." : "Delete Profile"}
+        {loading ? "Logging in..." : "Delete Profile"}
       </button>
-     <br/>
+      <br />
       <button type="submit" onClick={handleLogout} className={styles.logout}>
         Logout
       </button>

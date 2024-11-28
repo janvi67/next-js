@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import styles from "./page.module.css";
+import './../app/globals.css'
 
 const HomePage = () => {
   return (

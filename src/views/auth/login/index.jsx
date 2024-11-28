@@ -81,47 +81,87 @@ export default function LoginForm() {
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Invalid login data");
-
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginform}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" {...register("email")} />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" {...register("password")} />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/register")}
-          className="btn btn-secondary"
+    <div className="h-screen w-screen flex justify-center items-center dark:bg-gray-900">
+      <div class="grid gap-8">
+        <div
+          id="back-div"
+          class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4"
         >
-          Register
-        </button>
+          <div class="border-[20px] border-transparent rounded-[20px] dark:bg-gray-900 bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2">
+            <h1 class="pt-8 pb-6 font-bold dark:text-gray-400 text-5xl text-center cursor-default">
+              Log in
+            </h1>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-2  dark:text-gray-400 text-lg"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="border p-3 dark:bg-indigo-700 dark:text-gray-300  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                  {...register("email")}
+                />
+                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+              </div>
 
-        <button
-          type="button"
-          onClick={() => router.push("/forgetpwd")}
-          className="btn btn-secondary"
-        >
-          forgetPassword
-        </button>
-      </form>
-      {loading && <p className={styles.loadingMessage}>Please wait...</p>}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-2 dark:text-gray-400 text-lg"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300  dark:border-gray-700 placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                  {...register("password")}
+                />
+                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+              </div>
+              <a
+                class="group text-blue-400 transition-all duration-100 ease-in-out"
+                href="forgetpwd"
+              >
+                <span class="bg-left-bottom bg-gradient-to-r text-sm from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                  Forget your password?
+                </span>
+              </a>
+              <button
+                className="bg-gradient-to-r dark:text-gray-300 from-blue-500 to-purple-500 shadow-lg mt-6 p-2 text-white rounded-lg w-full hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+              <div class="flex flex-col mt-4 items-center justify-center text-sm">
+                <h3 class="dark:text-gray-300">
+                  Don&apos;t have an account?
+                  <a
+                    class="group text-blue-400 transition-all duration-100 ease-in-out"
+                    href="register"
+                  >
+                    <span class="bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                      Sign Up
+                    </span>
+                  </a>
+                </h3>
+              </div>
+            </form>
+            {loading && <p className={styles.loadingMessage}>Please wait...</p>}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

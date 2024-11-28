@@ -21,7 +21,11 @@ const geistMono = localFont({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} flex font-poppins items-center justify-center`}>
         <Provider store={store}>
           <PersistGate persistor={persistedStore}>
             <Layout>{children}</Layout>

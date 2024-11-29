@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { RegisterUser } from "../../../api/Auth";
 
 function RegisterForm() {
-
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username  is required"),
 
@@ -129,138 +128,212 @@ function RegisterForm() {
   };
   const today = new Date().toISOString().split("T")[0];
   return (
-    <div className={styles.registerform}>
-      <h5 className="card-header">Next.js - Form Validation Example</h5>
-      <div className="card-body">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-row">
-            <div className="form-group col">
-              <label>UserName</label>
-              <input {...register("username")} type="text" />
-              {errors.username && (
-                <p className={styles.error}>{errors.username.message}</p>
-              )}
-            </div>
-          </div>
+    <div className="h-screen w-screen flex justify-center items-center dark:bg-gray-900 ">
+      <div className="grid gap-8">
+        <div
+          id="back-div"
+          className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4"
+        >
+          <div className="border-[20px] border-transparent rounded-[20px] dark:bg-gray-900 bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2">
+            <h5 className="pt-8 pb-6 font-bold dark:text-gray-400 text-5xl text-center cursor-default">
+              Sign Up
+            </h5>
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div >
+                  <div className="flex items-center">
+                    <label className="mb-2  dark:text-gray-400 text-lg w-3/6">
+                      UserName
+                    </label>
+                    <input
+                      {...register("username")}
+                      type="text"
+                      className="border p-3 dark:bg-indigo-700  text-gray-600  dark:text-gray-300  dark:border-gray-700 shadow-md  focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                    />
+                    {errors.username && (
+                      <p className={styles.error}>{errors.username.message}</p>
+                    )}
+                  </div>
+                </div>
 
-          <div className="form-row">
-            <div className="form-group col">
-              <label>Date of Birth</label>
-              <input {...register("dob")} type="date" max={today} />
-              {errors.dob && (
-                <p className={styles.error}>{errors.dob.message}</p>
-              )}
-            </div>
-            <div className="form-group col">
-              <label>Email</label>
-              <input {...register("email")} type="email" />
-              {errors.email && (
-                <p className={styles.error}>{errors.email.message}</p>
-              )}
-            </div>
-          </div>
+                <div className="form-row">
+                  <div  className="flex items-center">
+                    <label className="mb-2 text-nowrap  dark:text-gray-400 text-lg w-3/6">
+                      Date of Birth
+                    </label>
+                    <input
+                      {...register("dob")}
+                      type="date"
+                      max={today}
+                      className="border p-3 dark:bg-indigo-700 dark:text-gray-300 text-gray-600  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                    />
+                    {errors.dob && (
+                      <p className={styles.error}>{errors.dob.message}</p>
+                    )}
+                  </div>
+                  </div>
+                  <div className="form-row">
+                  <div className="flex items-center">
+                    <label className="mb-2  dark:text-gray-400 text-lg w-3/6">
+                      Email
+                    </label>
+                    <input
+                      {...register("email")}
+                      type="email"
+                      className=" border p-3 dark:bg-indigo-700 dark:text-gray-300 text-gray-600  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                    />
+                    {errors.email && (
+                      <p className={styles.error}>{errors.email.message}</p>
+                    )}
+                  </div>
+                  </div>
+              
 
-          <div className="form-row">
-            <div className="form-group col">
-              <label>Password</label>
-              <div className={styles.passwordWrapper}>
-                <input
-                  {...register("password")}
-                  type={showPassword ? "text" : "password"}
-                />
-                {isMounted && (
-                  <button type="button" onClick={togglePasswordVisibility}>
-                    {showPassword ? <FaEye /> : <FaEyeSlash />}
+                <div className="form-row ">
+                  <div className="flex items-center" >
+                    <label className="mb-2 flex dark:text-gray-400 text-lg w-3/6">
+                      Password
+                    </label>
+                    <div className="w-full">
+                      <input
+                        {...register("password")}
+                        type={showPassword ? "text" : "password"}
+                        className=" border  p-3 relative dark:bg-indigo-700 dark:text-gray-300 text-gray-600  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                      />
+                      {isMounted && (
+                        <button
+                          type="button"
+                          onClick={togglePasswordVisibility}
+                          className="absolute mt-4 -ml-8"
+                        >
+                          {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </button>
+                      )}
+                    </div>
+                    {errors.password && (
+                      <p className={styles.error}>{errors.password.message}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="flex gap-2 items-center">
+                    <label className="mb-2 text-nowrap dark:text-gray-400 text-lg ">
+                      Confirm Password
+                    </label>
+                    <div className="w-full">
+                      <input
+                        {...register("confirmPassword")}
+                        type={showConfirmPassword ? "text" : "password"}
+                        className=" border p-3 relative dark:bg-indigo-700 dark:text-gray-300 text-gray-600  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                      />
+                      {isMounted && (
+                        <button
+                          type="button"
+                          onClick={togglePasswordVisibilitycp}
+                          className="absolute mt-4 -ml-8"
+                        >
+                          {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                        </button>
+                      )}
+                    </div>
+                    {errors.password && (
+                      <p className={styles.error}>
+                        {errors.confirmPassword.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="flex items-center gap-3">
+                    <label className="mb-2  dark:text-gray-400 text-lg w-3/6">
+                      Gender
+                    </label>
+                    <select
+                      {...register("gender")}
+                      defaultValue=""
+                      className=" border p-3 relative dark:bg-indigo-700 dark:text-gray-300 text-gray-600  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                    >
+                      <option value="" label="Select gender" />
+                      <option value="Male" label="Male" />
+                      <option value="Female" label="Female" />
+                      <option value="Other" label="Other" />
+                    </select>
+                    {errors.gender && (
+                      <p className={styles.error}>{errors.gender.message}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex  gap-3  items-centerl">
+                  <label className="mb-2  dark:text-gray-400 text-lg w-3/6 text-nowrap">
+                    Profile Picture
+                  </label>
+                  <input
+                    {...register("profilepic")}
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    className=" border p-3 relative dark:bg-indigo-700 dark:text-gray-300 text-gray-600  dark:border-gray-700 shadow-md placeholder:text-base focus:scale-105 ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                  />
+                  {errors.profilepic && (
+                    <p className={styles.error}>{errors.profilepic.message}</p>
+                  )}
+                </div>
+
+                <div className="form-group form-check">
+                  <input
+                    {...register("acceptTermsandConditions")}
+                    type="checkbox"
+                    id="acceptTermsandConditions"
+                  />
+                  <label
+                    className="mb-2  dark:text-gray-400 text-lg pl-2"
+                    htmlFor="acceptTermsandConditions"
+                  >
+                    Accept Terms & Conditions
+                  </label>
+                  {errors.acceptTermsandConditions && (
+                    <p className={styles.error}>
+                      {errors.acceptTermsandConditions.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-gradient-to-r dark:text-gray-300 from-blue-500 to-purple-500 shadow-lg mt-3 p-2 text-white rounded-lg w-full hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
+                  >
+                    {loading ? "Logging in..." : "Register Account"}
                   </button>
-                )}
-              </div>
-              {errors.password && (
-                <p className={styles.error}>{errors.password.message}</p>
+                  <h3 className="dark:text-gray-300 mt-3">
+                  Already have an account?
+                  <a
+                    className="group text-blue-400 transition-all duration-100 ease-in-out"
+                    href="login"
+                  >
+                    <span className="bg-left-bottom font-semibold pl-1  bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                      Sign in here
+                    </span>
+                  </a>
+                </h3>
+                
+                  <a  onClick={() => reset()}
+                    className="group text-blue-400 transition-all duration-100 ease-in-out"
+                    href="#"
+                  >
+                    <span className=" float-end -mt-5 bg-left-bottom font-semibold pl-1  bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                   Reset Form
+                    </span>
+                  </a>
+             
+                </div>
+              </form>
+              {loading && (
+                <p className={styles.loadingMessage}>Please wait...</p>
               )}
             </div>
           </div>
-          <div className="form-row">
-            <div className="form-group col">
-              <label>Confirm Password</label>
-              <div className={styles.passwordWrapper}>
-                <input
-                  {...register("confirmPassword")}
-                  type={showConfirmPassword ? "text" : "password"}
-                />
-                {isMounted && ( 
-                  <button type="button" onClick={togglePasswordVisibilitycp}>
-                    {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
-                  </button>
-                )}
-              </div>
-              {errors.password && (
-                <p className={styles.error}>{errors.confirmPassword.message}</p>
-              )}
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group col">
-              <label>Gender</label>
-              <select {...register("gender")} defaultValue="">
-                <option value="" label="Select gender" />
-                <option value="Male" label="Male" />
-                <option value="Female" label="Female" />
-                <option value="Other" label="Other" />
-              </select>
-              {errors.gender && (
-                <p className={styles.error}>{errors.gender.message}</p>
-              )}
-            </div>
-
-            <div className="form-group col">
-              <label>Profile Picture</label>
-              <input
-                {...register("profilepic")}
-                type="file"
-                accept="image/jpeg, image/png"
-              />
-              {errors.profilepic && (
-                <p className={styles.error}>{errors.profilepic.message}</p>
-              )}
-            </div>
-          </div>
-          <div className="form-group form-check">
-            <input
-              {...register("acceptTermsandConditions")}
-              type="checkbox"
-              id="acceptTermsandConditions"
-            />
-            <label htmlFor="acceptTermsandConditions">
-              Accept Terms & Conditions
-            </label>
-            {errors.acceptTermsandConditions && (
-              <p className={styles.error}>
-                {errors.acceptTermsandConditions.message}
-              </p>
-            )}
-          </div>
-
-          <div className="form-group">
-            <button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Register"}
-            </button>
-            <button
-              type="button"
-              onClick={() => router.push("/login")}
-              className="btn btn-secondary"
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              onClick={() => reset()}
-              className="btn btn-secondary"
-            >
-              Reset
-            </button>
-          </div>
-        </form>
-        {loading && <p className={styles.loadingMessage}>Please wait...</p>}
+        </div>
       </div>
     </div>
   );

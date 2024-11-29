@@ -88,13 +88,13 @@ export default function LoginForm() {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center dark:bg-gray-900">
-      <div class="grid gap-8">
+      <div className="grid gap-8">
         <div
           id="back-div"
-          class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4"
+          className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-[26px] m-4"
         >
-          <div class="border-[20px] border-transparent rounded-[20px] dark:bg-gray-900 bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2">
-            <h1 class="pt-8 pb-6 font-bold dark:text-gray-400 text-5xl text-center cursor-default">
+          <div className="border-[20px] border-transparent rounded-[20px] dark:bg-gray-900 bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2">
+            <h1 className="pt-8 pb-6 font-bold dark:text-gray-400 text-5xl text-center cursor-default">
               Log in
             </h1>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -130,10 +130,10 @@ export default function LoginForm() {
                 {errors.password && <p className="text-red-500">{errors.password.message}</p>}
               </div>
               <a
-                class="group text-blue-400 transition-all duration-100 ease-in-out"
+                className="group text-blue-400 transition-all duration-100 ease-in-out"
                 href="forgetpwd"
               >
-                <span class="bg-left-bottom bg-gradient-to-r text-sm from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                <span className="bg-left-bottom float-end pt-2  font-semibold bg-gradient-to-r text-sm from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                   Forget your password?
                 </span>
               </a>
@@ -144,14 +144,14 @@ export default function LoginForm() {
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <div class="flex flex-col mt-4 items-center justify-center text-sm">
-                <h3 class="dark:text-gray-300">
+              <div className="flex flex-col mt-4 items-center justify-center text-sm">
+                <h3 className="dark:text-gray-300">
                   Don&apos;t have an account?
                   <a
-                    class="group text-blue-400 transition-all duration-100 ease-in-out"
+                    className="group text-blue-400 transition-all duration-100 ease-in-out"
                     href="register"
                   >
-                    <span class="bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                    <span className="bg-left-bottom font-semibold pl-1 bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                       Sign Up
                     </span>
                   </a>
